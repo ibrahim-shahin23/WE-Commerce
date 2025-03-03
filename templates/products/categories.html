@@ -1,0 +1,33 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block title %}
+<link rel="stylesheet" href= "{% static "css/style.css" %}" /> 
+<style>
+    a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    text-decoration: none;
+    color: rgb(13 202 240);
+}
+</style>
+{% endblock title %}
+{% block main_content %}
+    <div class="d-flex justify-content-between p-3">
+        <h3>Categories page</h3>
+        <a class="btn btn-info" href="{% url 'add_category' %}">Add Category</a>
+    </div>
+     <ul>
+         {% for category in categories %}
+         <li class="text-start">
+             <a class="category fs-3 " href="{% url 'one_category' category_id=category.id %}">
+                 {{category.name}}
+            </a>
+        </li>
+    </ul>   
+             {% empty %}
+             <h3>{{error_message}}</h3>
+             {% endfor %}
+{% endblock main_content %}

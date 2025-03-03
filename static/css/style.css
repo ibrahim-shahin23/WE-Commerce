@@ -1,0 +1,11 @@
+h3{
+    color: blue;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    text-decoration: none;
+    color: blue;
+}

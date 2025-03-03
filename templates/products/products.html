@@ -1,0 +1,40 @@
+{% extends 'master.html' %}
+
+{% block title %}
+<style>
+  a{
+    font-size:20px;
+  text-decoration: none;
+  color: black;
+}
+a:hover{
+  text-decoration: none;
+  color: rgb(13 202 240);
+}
+</style>
+{% endblock title %}
+
+{% block main_content %}
+<div class="d-flex justify-content-between p-3">
+  <h3 class="mb-1">All {{category.name}} Products</h3>
+  <div class="d-flex gap-3">
+    {% if category %}
+    <a class="btn btn-warning" href="{% url 'edit_category' category_id=category.id %}">Edit Category</a>
+    <a class="btn btn-danger" href="{% url 'delete_category' category_id=category.id %}">Delete Category</a>
+    {% endif %}
+    <a class="btn btn-success" href="{% url 'add_product' %}">Add Product</a>
+  </div>
+</div>
+<hr class="mb-3">
+<div class="d-flex flex-wrap gap-4 justify-content-evenly">
+    {% for product in products %}
+      {% url 'one_product' product_id=product.id as product_url %}
+      {% with p=product %}
+        {% include 'components/card.html' with card_title=p.title card_body=p.description card_image=p.thumbnail.url card_url=product_url %}
+      {% endwith %}
+      {% empty %}
+        <h3>{{error_message}}</h3>
+        <a href="{% url 'all_products' %}"> &#8630 Return to all products</a>
+    {% endfor %}
+</div>
+{% endblock %}
