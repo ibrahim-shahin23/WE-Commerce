@@ -1,7 +1,5 @@
 {% extends 'master.html' %}
 
-
-
 {% block main_content %}
 <div class="d-flex justify-content-between p-3">
     <h3 class="mb-1 ">{{product.title}}</h3>
@@ -18,7 +16,8 @@
     <div>
         <h3>{{product.title}}</h3>
         <p>{{product.description}}</p>
-        <h6>${{product.price}}</h6>
+        <h5>rating: {{product.rating}}/5</h5>
+        <h4>${{product.price}}</h4>
     </div>
 
 </div>

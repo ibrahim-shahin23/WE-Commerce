@@ -12,8 +12,14 @@
         </ul>
         <form class="d-flex" role="search" method="get" action="{% url 'search_products' %}">
           <input name="title" class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search">
-          <button class="btn btn-outline-info" type="submit">Search</button>
+          <button class="btn btn-outline-light" type="submit">Search</button>
       </form>
+      {% if user.id %}
+      <span class="mx-3">welcome {{user}}!</span>
+      {% else %}
+        <a href="{% url "login" %}" class="mx-2 btn btn-light">Login</a> 
+        {% comment %} {% url "login" %} {% endcomment %}
+      {% endif %}
         </div>
     </div>
   </nav>

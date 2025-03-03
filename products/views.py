@@ -91,6 +91,10 @@ class CreateProductView(CreateView):
         context = super().get_context_data(**kwargs)
         context["form_title"] = "Add New Product"
         return context
+    def form_valid(self, form):
+        print("product added successfully")
+        return super().form_valid(form)
+    
     
 class EditProductView(UpdateView):
     model = Product
