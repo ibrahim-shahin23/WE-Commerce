@@ -4,8 +4,12 @@
 <div class="d-flex justify-content-between p-3">
     <h3 class="mb-1 ">{{product.title}}</h3>
     <div class="d-flex gap-2">
-        <a class="btn btn-warning" href="{% url 'edit_product' product_id=product.id %}">Edit Product</a>
-        <a class="btn btn-danger" href="{% url 'delete_product' product_id=product.id %}">Delete Product</a>
+        {% if user.id %}
+            <a class="btn btn-warning" href="{% url 'edit_product' product_id=product.id %}">Edit Product</a>
+            {% if user.is_superuser %}
+                <a class="btn btn-danger" href="{% url 'delete_product' product_id=product.id %}">Delete Product</a>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 <hr>

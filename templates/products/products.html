@@ -18,11 +18,16 @@ a:hover{
 <div class="d-flex justify-content-between p-3">
   <h3 class="mb-1">All {{category.name}} Products</h3>
   <div class="d-flex gap-3">
-    {% if category %}
-    <a class="btn btn-warning" href="{% url 'edit_category' category_id=category.id %}">Edit Category</a>
-    <a class="btn btn-danger" href="{% url 'delete_category' category_id=category.id %}">Delete Category</a>
+    {% if user.id %}
+      {% if category  %} 
+        {% if user.is_superuser %}
+          <a class="btn btn-danger" href="{% url 'delete_category' category_id=category.id %}">Delete Category</a>
+        {% else %}
+          <a class="btn btn-warning" href="{% url 'edit_category' category_id=category.id %}">Edit Category</a>
+        {% endif %}
+      {% endif %}
+      <a class="btn btn-success" href="{% url 'add_product' %}">Add Product</a>
     {% endif %}
-    <a class="btn btn-success" href="{% url 'add_product' %}">Add Product</a>
   </div>
 </div>
 <hr class="mb-3">
@@ -30,7 +35,7 @@ a:hover{
     {% for product in products %}
       {% url 'one_product' product_id=product.id as product_url %}
       {% with p=product %}
-        {% include 'components/card.html' with card_title=p.title card_body=p.description card_image=p.thumbnail.url card_url=product_url %}
+        {% include 'components/card.html' with card_id=p.id card_title=p.title card_body=p.description card_image=p.thumbnail.url card_url=product_url %}
       {% endwith %}
       {% empty %}
         <h3>{{error_message}}</h3>

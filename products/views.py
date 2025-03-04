@@ -1,7 +1,11 @@
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from .forms import CategoryForm, ProductForm
-from .models import Product, Category
+from .models import Cart, CartItem, Product, Category
 from django.views.generic import ListView, DetailView ,CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin ,UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
+
 
 class ProductListView(ListView):
     model = Product  # Specify the model to use
@@ -80,7 +84,7 @@ class ProductSearchView(ListView):
         context["query"] = self.request.GET.get("title", "")
         return context
 
-class CreateProductView(CreateView):
+class CreateProductView(LoginRequiredMixin, CreateView):
     template_name = "products/forms/form.html"
     form_class = ProductForm
     success_url = "/products/"
@@ -94,7 +98,7 @@ class CreateProductView(CreateView):
         return super().form_valid(form)
     
     
-class EditProductView(UpdateView):
+class EditProductView(LoginRequiredMixin, UpdateView):
     model = Product
     template_name = "products/forms/form.html"
     form_class = ProductForm
@@ -102,7 +106,7 @@ class EditProductView(UpdateView):
     success_url = reverse_lazy("all_products")
     extra_context = {"form_title" : "Edit Product"}
 
-class CreateCategoryView(CreateView):
+class CreateCategoryView(LoginRequiredMixin, CreateView):
     model = Category
     template_name = "products/forms/form.html"
     form_class = CategoryForm
@@ -113,7 +117,7 @@ class CreateCategoryView(CreateView):
         context["form_title"] = "Add New Category"
         return context
     
-class EditCategoryView(UpdateView):
+class EditCategoryView(LoginRequiredMixin, UpdateView):
     model = Category
     template_name = "products/forms/form.html"
     form_class = CategoryForm
@@ -121,12 +125,40 @@ class EditCategoryView(UpdateView):
     extra_context = {"form_title" : "Edit Category"}
     success_url = reverse_lazy("all_categories")
 
-class DeleteProductView(DeleteView):
+class DeleteProductView(UserPassesTestMixin,DeleteView):
     model = Product
     success_url = reverse_lazy("all_products")
     pk_url_kwarg = 'product_id'
 
-class DeleteCategoryView(DeleteView):
+    def test_func(self):
+        return self.request.user.is_superuser
+    
+class DeleteCategoryView(UserPassesTestMixin,DeleteView):
     model = Category
     success_url = reverse_lazy("all_categories")
     pk_url_kwarg = 'category_id'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+    
+@login_required
+def add_to_cart(request, product_id):
+    product = Product.objects.get(id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+    return redirect('view_cart')
+
+@login_required
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.cartitem_set.all()
+    return render(request, 'cart/view_cart.html', {'cart_items': cart_items})
+
+@login_required
+def remove_from_cart(request, product_id):
+    cart = Cart.objects.get(user=request.user)
+    CartItem.objects.filter(cart=cart, product_id=product_id).delete()
+    return redirect('view_cart')

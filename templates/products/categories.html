@@ -17,7 +17,9 @@ a:hover{
 {% block main_content %}
     <div class="d-flex justify-content-between p-3">
         <h3>Categories page</h3>
+            {% if user.id %}
         <a class="btn btn-info" href="{% url 'add_category' %}">Add Category</a>
+        {% endif %}
     </div>
      <ul>
          {% for category in categories %}

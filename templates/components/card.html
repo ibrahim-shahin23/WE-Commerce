@@ -4,6 +4,8 @@
         </a>
       <div class="card-body pb-0">
         <h4>{{card_title}}</h4>
+        <!-- <h4>{{card_id}}</h4> -->
         <p class="card-text">{{ card_body }}</p>
+        <a href="{% url 'add_to_cart' product_id=card_id %}" class="btn btn-info">Add to Cart</a>
       </div>
     </div>
