@@ -16,7 +16,9 @@
     <div>
         <h3>{{product.title}}</h3>
         <p>{{product.description}}</p>
-        <h5>rating: {{product.rating}}/5</h5>
+        {% if product.rating %}
+            <h5>rating: {{product.rating}}/5</h5>
+        {% endif %}
         <h4>${{product.price}}</h4>
     </div>
 

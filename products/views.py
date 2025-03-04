@@ -1,4 +1,3 @@
-from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from .forms import CategoryForm, ProductForm
 from .models import Product, Category
@@ -82,7 +81,6 @@ class ProductSearchView(ListView):
         return context
 
 class CreateProductView(CreateView):
-    model = Product
     template_name = "products/forms/form.html"
     form_class = ProductForm
     success_url = "/products/"

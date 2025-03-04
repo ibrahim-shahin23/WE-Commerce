@@ -9,6 +9,7 @@
     {% for field in form %}
         <div class="form-group my-3">
             <label class="mb-1"  for="{{field.id_for_label}}">{{field.label}}</label>
+            {% comment %} {% if field.field.widget.input_type == "number" %} {% endcomment %}
             
             {% if field.field.widget.input_type == "select" %}
             <!-- Render a select dropdown -->
@@ -21,6 +22,14 @@
                     </option>
                 {% endfor %}
             </select>
+            {% elif field.field.widget.input_type == "number" %}
+                <!-- Render a number input with step="any" for float values -->
+                <input type="number"
+                       class="form-control {% if field.errors %}is-invalid{% endif %}"
+                       id="{{ field.id_for_label }}"
+                       name="{{ field.name }}"
+                       value="{{ field.value|default_if_none:'' }}"
+                       step="any" />
             {% else %}
             <input type="{{field.field.widget.input_type}}"
                    class="form-control {% if field.errors %}is-invalid{% endif %}" 

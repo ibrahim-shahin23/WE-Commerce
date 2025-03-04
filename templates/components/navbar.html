@@ -15,7 +15,12 @@
           <button class="btn btn-outline-light" type="submit">Search</button>
       </form>
       {% if user.id %}
-      <span class="mx-3">welcome {{user}}!</span>
+        <span class="mx-3">welcome {{user}}!</span>
+        <form action="{% url "logout" %}" method="post">
+          {% csrf_token %}
+          <button class="mx-2 btn btn-dark" type="submit">Logout</button>
+        </form>
+        <img class="rounded-circle" src="{{user.image.url}}" width="40" height="40" alt="user-image">
       {% else %}
         <a href="{% url "login" %}" class="mx-2 btn btn-light">Login</a> 
         {% comment %} {% url "login" %} {% endcomment %}
