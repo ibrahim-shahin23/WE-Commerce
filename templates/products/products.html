@@ -42,4 +42,24 @@ a:hover{
         <a href="{% url 'all_products' %}"> &#8630 Return to all products</a>
     {% endfor %}
 </div>
+<script>
+async function add_to_cart(e) {
+    const product_id = e.target.id;
+    try {
+        const response = await fetch(`/products/add_to_cart/${product_id}/`);
+        const json_res = await response.json();
+
+        if (json_res.success) {
+            console.log("Added to cart");
+        } else {
+            console.log("Couldn't Add to cart");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+  window.onload = () =>document.querySelectorAll(".add_to_cart").forEach((element)=>{
+    element.addEventListener('click',add_to_cart)
+  })
+</script>
 {% endblock %}

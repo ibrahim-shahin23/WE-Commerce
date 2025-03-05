@@ -21,12 +21,36 @@
         <li>
             <img src="{{ item.product.thumbnail.url }}" width="100px" height="100px" alt="">
             <span>{{ item.product.title }}</span> 
-            <a class="btn btn-info" href="{% url 'add_to_cart' item.product.id %}">+</a>
-            <span>Quantity: {{ item.quantity }}</span>
+            <button class="btn btn-info add_to_cart" id="{{ item.product.id }}">+</button>
+            <span id="quantity">{{ item.quantity }}</span>
             <a class="btn btn-info" href="{% url 'remove_from_cart' item.product.id %}"><i class="fa fa-trash-o"></i>Remove</a>
         </li>
         <hr>
         {% endfor %}
     </ul>
 </div>
+<script>
+    async function add_to_cart(e) {
+        const product_id = e.target.id;
+        try {
+            const response = await fetch(`/products/add_to_cart/${product_id}/`);
+            const json_res = await response.json();
+    
+            if (json_res.success) {
+                const span = e.target.parentElement.querySelector("#quantity")
+                const old_value = parseInt(span.innerHTML)
+                span.innerHTML = old_value + 1
+
+            } else {
+                console.log("Couldn't increase quantity");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+      window.onload = () =>document.querySelectorAll(".add_to_cart").forEach((element)=>{
+        element.addEventListener('click',add_to_cart)
+      })
+</script>
+    
 {% endblock main_content %}

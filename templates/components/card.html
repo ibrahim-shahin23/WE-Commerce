@@ -1,4 +1,4 @@
-<div class="card" style="width: 18rem;">
+<div class="card" id="{{card_id}}" style="width: 18rem;">
         <a class="h-50" href="{{card_url}}">
             <img src="{{ card_image }}" class="card-img-top img-fluid w-100 h-100" style="object-fit: contain;" alt="{{card_title}}">
         </a>
@@ -6,6 +6,7 @@
         <h4>{{card_title}}</h4>
         <!-- <h4>{{card_id}}</h4> -->
         <p class="card-text">{{ card_body }}</p>
-        <a href="{% url 'add_to_cart' product_id=card_id %}" class="btn btn-info">Add to Cart</a>
-      </div>
+        <button id="{{card_id}}" class="btn btn-info add_to_cart">Add to Cart</burtton>
+          <!-- href="{% url 'add_to_cart' product_id=card_id %}" -->
+        </div>
     </div>

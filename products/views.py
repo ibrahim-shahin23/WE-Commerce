@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from .forms import CategoryForm, ProductForm
@@ -144,12 +145,16 @@ class DeleteCategoryView(UserPassesTestMixin,DeleteView):
 @login_required
 def add_to_cart(request, product_id):
     product = Product.objects.get(id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    return redirect('view_cart')
+    if(product):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+        return JsonResponse({"success":True},status=200)
+    else:
+        return JsonResponse({"success":False},status=404)
+# redirect('view_cart')
 
 @login_required
 def view_cart(request):
