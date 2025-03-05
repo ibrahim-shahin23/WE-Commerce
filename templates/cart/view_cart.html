@@ -1,9 +1,32 @@
-<h1>Your Shopping Cart</h1>
-<ul>
-    {% for item in cart_items %}
+{% extends 'master.html' %}
+{% block title %}
+<style>
+    li{
+        list-style: none;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 10px;
+    }
+    span{
+        width:30%
+    }
+</style>
+    {% endblock title %}
+    {% block main_content %}
+    <div class="text-center">
+        <h1 >Your Shopping Cart</h1>
+    <ul>
+        {% for item in cart_items %}
         <li>
-            {{ item.product.title }} - Quantity: {{ item.quantity }}
-            <a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
+            <img src="{{ item.product.thumbnail.url }}" width="100px" height="100px" alt="">
+            <span>{{ item.product.title }}</span> 
+            <a class="btn btn-info" href="{% url 'add_to_cart' item.product.id %}">+</a>
+            <span>Quantity: {{ item.quantity }}</span>
+            <a class="btn btn-info" href="{% url 'remove_from_cart' item.product.id %}"><i class="fa fa-trash-o"></i>Remove</a>
         </li>
-    {% endfor %}
-</ul>
+        <hr>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock main_content %}
